@@ -1,11 +1,11 @@
 package me.zeroeightsix.kami.module.modules.render;
 
+import me.zeroeightsix.kami.KamiMod;
 import me.zeroeightsix.kami.event.events.RenderEvent;
 import me.zeroeightsix.kami.module.Module;
-import me.zeroeightsix.kami.module.ModuleManager;
-import me.zeroeightsix.kami.module.modules.combat.CrystalAura;
 import me.zeroeightsix.kami.setting.Setting;
 import me.zeroeightsix.kami.setting.Settings;
+import me.zeroeightsix.kami.util.BlockInteractionHelper;
 import me.zeroeightsix.kami.util.GeometryMasks;
 import me.zeroeightsix.kami.util.KamiTessellator;
 import net.minecraft.block.Block;
@@ -19,12 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static me.zeroeightsix.kami.module.modules.combat.CrystalAura.getPlayerPos;
 
-
 /**
  * Created 16 November 2019 by hub
- * Updated by S-B99 on 15/12/19
+ * Updated  28 November 2019 by hub
  */
-@Module.Info(name = "HoleESP", category = Module.Category.COMBAT, description = "Show safe holes")
+@Module.Info(name = "HoleESP", category = Module.Category.RENDER, description = "Show safe holes")
 public class HoleESP extends Module {
 
     private final BlockPos[] surroundOffset = {
@@ -35,25 +34,17 @@ public class HoleESP extends Module {
             new BlockPos(-1, 0, 0) // west
     };
 
-    private Setting<Double> renderDistance = register(Settings.d("Render Distance", 8.0d));
-    private Setting<Boolean> renObby = register(Settings.b("Render Obby", true));
-    private Setting<Boolean> renBedr = register(Settings.b("Render Bedrock", true));
-    private Setting<RenderMode> renderMode = register(Settings.e("Render Mode", RenderMode.BLOCK));
-    private Setting<Integer> Red = register(
-            Settings.integerBuilder("Red").withMinimum(0).withMaximum(255).withValue(255));
-    private Setting<Integer> Green = register(
-            Settings.integerBuilder("Green").withMinimum(0).withMaximum(255).withValue(0));
-    private Setting<Integer> Blue = register(
-            Settings.integerBuilder("Blue").withMinimum(0).withMaximum(255).withValue(255));
-    private Setting<Integer> Alpha = register(
-            Settings.integerBuilder("Alpha").withMinimum(0).withMaximum(70).withValue(45));
-    private Setting<Integer> Red2 = register(
-            Settings.integerBuilder("Red").withMinimum(0).withMaximum(255).withValue(255));
-    private Setting<Integer> Green2 = register(
-            Settings.integerBuilder("Green").withMinimum(0).withMaximum(255).withValue(0));
-    private Setting<Integer> Blue2 = register(
-            Settings.integerBuilder("Blue").withMinimum(0).withMaximum(255).withValue(255));
-
+    private Setting<HoleType> holeType = register(Settings.e("HoleType", HoleType.BOTH));
+    private Setting<Boolean> hideOwn = register(Settings.b("HideOwn", false));
+    private Setting<Double> renderDistance = register(Settings.doubleBuilder("RenderDistance").withMinimum(1.0).withValue(8.0).withMaximum(32.0).build());
+    private Setting<RenderMode> renderMode = register(Settings.e("RenderMode", RenderMode.DOWN));
+    private Setting<Integer> obiRed = register(Settings.integerBuilder("ObiRed").withMinimum(0).withValue(104).withMaximum(255).build());
+    private Setting<Integer> obiGreen = register(Settings.integerBuilder("ObiGreen").withMinimum(0).withValue(12).withMaximum(255).build());
+    private Setting<Integer> obiBlue = register(Settings.integerBuilder("ObiBlue").withMinimum(0).withValue(35).withMaximum(255).build());
+    private Setting<Integer> brockRed = register(Settings.integerBuilder("BrockRed").withMinimum(0).withValue(81).withMaximum(255).build());
+    private Setting<Integer> brockGreen = register(Settings.integerBuilder("BrockGreen").withMinimum(0).withValue(12).withMaximum(255).build());
+    private Setting<Integer> brockBlue = register(Settings.integerBuilder("BrockBlue").withMinimum(0).withValue(104).withMaximum(255).build());
+    private Setting<Integer> alpha = register(Settings.integerBuilder("Alpha").withMinimum(0).withValue(169).withMaximum(255).build());
 
     private ConcurrentHashMap<BlockPos, Boolean> safeHoles;
 
@@ -68,8 +59,7 @@ public class HoleESP extends Module {
 
         int range = (int) Math.ceil(renderDistance.getValue());
 
-    /*    CrystalAura crystalAura = (CrystalAura) ModuleManager.getModuleByName("CrystalAura");
-        List<BlockPos> blockPosList = crystalAura.getSphere(getPlayerPos(), range, range, false, true, 0);
+        List<BlockPos> blockPosList = BlockInteractionHelper.getSphere(getPlayerPos(), range, range, false, true, 0);
 
         for (BlockPos pos : blockPosList) {
 
@@ -85,6 +75,10 @@ public class HoleESP extends Module {
 
             // block 2 above gotta be air
             if (!mc.world.getBlockState(pos.add(0, 2, 0)).getBlock().equals(Blocks.AIR)) {
+                continue;
+            }
+
+            if (hideOwn.getValue() && pos.equals(new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ))) {
                 continue;
             }
 
@@ -108,7 +102,7 @@ public class HoleESP extends Module {
 
         }
 
-    */}
+    }
 
     @Override
     public void onWorldRender(final RenderEvent event) {
@@ -124,10 +118,14 @@ public class HoleESP extends Module {
         KamiTessellator.prepare(GL11.GL_QUADS);
 
         safeHoles.forEach((blockPos, isBedrock) -> {
-            if (isBedrock && renBedr.getValue()) {
-                drawBox(blockPos, Red2.getValue(), Green2.getValue(), Blue2.getValue());
-            } else if (renObby.getValue()){
-                drawBox(blockPos, Red.getValue(), Green.getValue(), Blue.getValue());
+            if (isBedrock) {
+                if (holeType.getValue().equals(HoleType.BOTH) || holeType.getValue().equals(HoleType.BROCK)) {
+                    drawBlock(blockPos, brockRed.getValue(), brockGreen.getValue(), brockBlue.getValue());
+                }
+            } else {
+                if (holeType.getValue().equals(HoleType.BOTH) || holeType.getValue().equals(HoleType.OBI)) {
+                    drawBlock(blockPos, obiRed.getValue(), obiGreen.getValue(), obiBlue.getValue());
+                }
             }
         });
 
@@ -135,17 +133,26 @@ public class HoleESP extends Module {
 
     }
 
-    private void drawBox(BlockPos blockPos, int r, int g, int b) {
-        Color color = new Color(r, g, b, Alpha.getValue());
-        if (renderMode.getValue().equals(RenderMode.DOWN)) {
-            KamiTessellator.drawBox(blockPos, color.getRGB(), GeometryMasks.Quad.DOWN);
-        } else if (renderMode.getValue().equals(RenderMode.BLOCK)) {
-            KamiTessellator.drawBox(blockPos, color.getRGB(), GeometryMasks.Quad.ALL);
+    private void drawBlock(BlockPos blockPos, int r, int g, int b) {
+        Color color = new Color(r, g, b, alpha.getValue());
+        int mask = GeometryMasks.Quad.DOWN;
+        if (renderMode.getValue().equals(RenderMode.BLOCK)) {
+            mask = GeometryMasks.Quad.ALL;
         }
+        KamiTessellator.drawBox(blockPos, color.getRGB(), mask);
+    }
+
+    @Override
+    public String getHudInfo() {
+        return holeType.getValue().toString();
     }
 
     private enum RenderMode {
         DOWN, BLOCK
+    }
+
+    private enum HoleType {
+        BROCK, OBI, BOTH
     }
 
 }
