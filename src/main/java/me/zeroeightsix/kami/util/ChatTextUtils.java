@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class ChatTextUtils {
 
-    public static final String CHAT_SUFFIX = " \u23D0 " + KamiMod.NAME_UNICODE;
+    public static final String CHAT_SUFFIX = " \u23D0 " ;
     public static final String SECTIONSIGN = "\u00A7";
 
     private static Random rand = new Random();
@@ -82,3 +82,4 @@ public class ChatTextUtils {
     }
 
 }
+
