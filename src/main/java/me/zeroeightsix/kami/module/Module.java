@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import me.zeroeightsix.kami.KamiMod;
 import me.zeroeightsix.kami.event.events.RenderEvent;
+import me.zeroeightsix.kami.gui.kami.KamiGUI;
+import me.zeroeightsix.kami.module.modules.movement.Sprint;
 import me.zeroeightsix.kami.setting.Setting;
 import me.zeroeightsix.kami.setting.Settings;
 import me.zeroeightsix.kami.setting.builder.SettingBuilder;
@@ -19,7 +21,7 @@ import java.util.List;
 
 /**
  * Created by 086 on 23/08/2017.
- * Updated by FINZ0 on 14 December 2019
+ * Updated by hub on 3 November 2019
  */
 public class Module {
 
@@ -29,7 +31,6 @@ public class Module {
     private final Category category = getAnnotation().category();
     private Setting<Bind> bind = register(Settings.custom("Bind", Bind.none(), new BindConverter()).build());
     private Setting<Boolean> enabled = register(Settings.booleanBuilder("Enabled").withVisibility(aBoolean -> false).withValue(false).build());
-    private Setting<Boolean> drawn = register(Settings.booleanBuilder("Drawn").withVisibility(aBoolean -> false).withValue(true).build());
     public boolean alwaysListening;
     protected static final Minecraft mc = Minecraft.getMinecraft();
 
@@ -47,14 +48,9 @@ public class Module {
         throw new IllegalStateException("No Annotation on class " + this.getClass().getCanonicalName() + "!");
     }
 
-    public void onUpdate() {
-    }
-
-    public void onRender() {
-    }
-
-    public void onWorldRender(RenderEvent event) {
-    }
+    public void onUpdate() {}
+    public void onRender() {}
+    public void onWorldRender(RenderEvent event) {}
 
     public Bind getBind() {
         return bind.getValue();
@@ -73,15 +69,14 @@ public class Module {
         return originalName;
     }
 
-    public enum Category {
+    public enum Category
+    {
         COMBAT("Combat", false),
         EXPLOITS("Exploits", false),
         RENDER("Render", false),
         MISC("Misc", false),
         PLAYER("Player", false),
         MOVEMENT("Movement", false),
-        CHAT("Chat", false),
-        DEV("Dev", false),
         HIDDEN("Hidden", true);
 
         boolean hidden;
@@ -102,13 +97,11 @@ public class Module {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Info {
+    public @interface Info
+    {
         String name();
-
         String description() default "Descriptionless";
-
         Module.Category category();
-
         boolean alwaysListening() default false;
     }
 
@@ -128,15 +121,8 @@ public class Module {
         return enabled.getValue();
     }
 
-    public boolean isDrawn(){
-        return drawn.getValue();
-    }
-
-    protected void onEnable() {
-    }
-
-    protected void onDisable() {
-    }
+    protected void onEnable() {}
+    protected void onDisable() {}
 
     public void toggle() {
         setEnabled(!isEnabled());
@@ -145,25 +131,15 @@ public class Module {
     public void enable() {
         enabled.setValue(true);
         onEnable();
-        if (!alwaysListening) {
+        if (!alwaysListening)
             KamiMod.EVENT_BUS.subscribe(this);
-        }
     }
 
     public void disable() {
         enabled.setValue(false);
         onDisable();
-        if (!alwaysListening) {
+        if (!alwaysListening)
             KamiMod.EVENT_BUS.unsubscribe(this);
-        }
-    }
-
-    public void draw() {
-        drawn.setValue(true);
-    }
-
-    public void dontDraw() {
-        drawn.setValue(false);
     }
 
     public boolean isDisabled() {
@@ -172,24 +148,11 @@ public class Module {
 
     public void setEnabled(boolean enabled) {
         boolean prev = this.enabled.getValue();
-        if (prev != enabled) {
-            if (enabled) {
+        if (prev != enabled)
+            if (enabled)
                 enable();
-            } else {
+            else
                 disable();
-            }
-        }
-    }
-
-    public void setDrawn(boolean drawn) {
-        boolean prev = this.drawn.getValue();
-        if (prev != drawn) {
-            if (drawn) {
-                draw();
-            } else {
-                dontDraw();
-            }
-        }
     }
 
     public String getHudInfo() {
@@ -198,19 +161,14 @@ public class Module {
 
     protected final void setAlwaysListening(boolean alwaysListening) {
         this.alwaysListening = alwaysListening;
-        if (alwaysListening) {
-            KamiMod.EVENT_BUS.subscribe(this);
-        }
-        if (!alwaysListening && isDisabled()) {
-            KamiMod.EVENT_BUS.unsubscribe(this);
-        }
+        if (alwaysListening) KamiMod.EVENT_BUS.subscribe(this);
+        if (!alwaysListening && isDisabled()) KamiMod.EVENT_BUS.unsubscribe(this);
     }
 
     /**
      * Cleanup method in case this module wants to do something when the client closes down
      */
-    public void destroy() {
-    }
+    public void destroy(){};
 
     protected void registerAll(Setting... settings) {
         for (Setting setting : settings) {
@@ -219,17 +177,13 @@ public class Module {
     }
 
     protected <T> Setting<T> register(Setting<T> setting) {
-        if (settingList == null) {
-            settingList = new ArrayList<>();
-        }
+        if (settingList == null) settingList = new ArrayList<>();
         settingList.add(setting);
         return SettingBuilder.register(setting, "modules." + originalName);
     }
 
     protected <T> Setting<T> register(SettingBuilder<T> builder) {
-        if (settingList == null) {
-            settingList = new ArrayList<>();
-        }
+        if (settingList == null) settingList = new ArrayList<>();
         Setting<T> setting = builder.buildAndRegister("modules." + name);
         settingList.add(setting);
         return setting;
@@ -245,20 +199,29 @@ public class Module {
         @Override
         protected Bind doBackward(JsonElement jsonElement) {
             String s = jsonElement.getAsString();
-            if (s.equalsIgnoreCase("None")) {
-                return Bind.none();
+            if (s.equalsIgnoreCase("None")) return Bind.none();
+            boolean ctrl = false, alt = false, shift = false;
+
+            if (s.startsWith("Ctrl+")) {
+                ctrl = true;
+                s = s.substring(5);
+            }
+            if (s.startsWith("Alt+")) {
+                alt = true;
+                s = s.substring(4);
+            }
+            if (s.startsWith("Shift+")) {
+                shift = true;
+                s = s.substring(6);
             }
 
             int key = -1;
             try {
                 key = Keyboard.getKeyIndex(s.toUpperCase());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
 
-            if (key == 0) {
-                return Bind.none();
-            }
-            return new Bind(key);
+            if (key == 0) return Bind.none();
+            return new Bind(ctrl, alt, shift, key);
         }
     }
 }
