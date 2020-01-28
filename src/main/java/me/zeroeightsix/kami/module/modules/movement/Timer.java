@@ -1,42 +1,46 @@
 package me.zeroeightsix.kami.module.modules.movement;
-
-
-import me.zeroeightsix.kami.event.events.EventPlayerUpdate;
-import me.zeroeightsix.kami.event.events.EventStageable;
-import me.zeroeightsix.kami.event.events.Listener;
-
-import me.zeroeightsix.kami.event.events.Value;
-import me.zeroeightsix.kami.gui.kami.component.UnboundSlider;
+import me.zeroeightsix.kami.command.Command;
 import me.zeroeightsix.kami.module.Module;
-import net.minecraft.client.Minecraft;
-
-
-@Module.Info(name = "Timer", category = Module.Category.HIDDEN, description = "timer. my nigga")
-public class Timer extends Module {}
-
-
-    /*    public final class TimerModule extends Module {
-
-                public final Value<Float> speed = new Value<Float>("Speed", new String[]{"Spd"}, "Tick-rate multiplier. [(20tps/second) * (this value)]", 4.0f, 0.0f, 10.0f, 0.1f);
+import me.zeroeightsix.kami.module.ModuleManager;
+import me.zeroeightsix.kami.setting.Setting;
+import me.zeroeightsix.kami.setting.Settings;
 
 
 
-                @Override
-                public void onDisable() {
-                        super.onDisable();
-                        Minecraft.getMinecraft().timer.tickLength = 50;
-                }
 
+@Module.Info(name = "Timer", category = Module.Category.MOVEMENT, description = "timer. my nigga")
+public class Timer extends Module {
 
-                public String getMetaData() {
-                        return "" + this.speed.getValue();
-                }
+    private int tickWait = 0;
 
-                @Listener
-                public void onUpdate(EventPlayerUpdate event) {
-                        if(event.getStage() == EventStageable.EventStage.PRE) {
-                                Minecraft.getMinecraft().timer.tickLength = 50.0f / speed.getValue();
-                        }
-                }
+    private Setting<Float> speedUsual = register(Settings.floatBuilder("Speed").withMinimum(0f).withMaximum(10f).withValue(4.2f));
+    private Setting<Float> fastUsual = register(Settings.floatBuilder("Fast Speed").withMinimum(0f).withMaximum(200f).withValue(10f));
+    private Setting<Float> tickToFast = register(Settings.floatBuilder("Tick To Fast").withMinimum(0f).withMaximum(20f).withValue(4f));
+    private Setting<Float> tickToNoFast = register(Settings.floatBuilder("Tick To Disable Fast").withMinimum(0f).withMaximum(20f).withValue(7f));
+    private Setting<Boolean> infoMessage = register(Settings.b("Info Message", false));
 
-     *///   }}
+    @Override
+    public void onDisable() {
+        mc.timer.tickLength = 50;
+        
+    }
+
+    @Override
+    public void onUpdate() {
+        if (tickWait == tickToFast.getValue()) {
+            mc.timer.tickLength = 50.0f / fastUsual.getValue();
+           // this.setHudInfo(fastUsual.getValue().toString());
+        }
+        if (tickWait >= tickToNoFast.getValue()) {
+            tickWait = 0;
+            mc.timer.tickLength = 50.0f / speedUsual.getValue();
+           // this.setHudInfo(speedUsual.getValue().toString());
+        }
+        tickWait++;
+    }
+    @Override
+    protected void onEnable() {
+        if (infoMessage.getValue() && mc.world != null) {
+            Command.sendChatMessage(" \u00A7eTimer \u00A7aON");
+        }
+    }}
