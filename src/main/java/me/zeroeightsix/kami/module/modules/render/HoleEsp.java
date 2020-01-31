@@ -34,18 +34,17 @@ public class HoleEsp extends Module {
 	private Setting<Boolean> highlight = register(Settings.b("Block Highlight", false));
 	private Setting<Boolean> box = register(Settings.b("Bouding Box", true));
 	private Setting<Boolean> bottom = register(Settings.b("Bottom Highlight", false));
-	private Setting<Boolean> bottomBox = register(Settings.b("Bottom Boudning Box", false));
-	private Setting<Double> chromaSpeed = register(Settings.d("Chroma Speed", 30.0));
+	private Setting<Boolean> bottomBox = register(Settings.b("Bottom Bounding Box", false));
 	private Setting<Integer> Red = register(
-			Settings.integerBuilder("Red").withMinimum(0).withMaximum(255).withValue(255));
+			Settings.integerBuilder("Red").withMinimum(1).withMaximum(255).withValue(255));
 	private Setting<Integer> Green = register(
-			Settings.integerBuilder("Green").withMinimum(0).withMaximum(255).withValue(0));
+			Settings.integerBuilder("Green").withMinimum(1).withMaximum(255).withValue(0));
 	private Setting<Integer> Blue = register(
-			Settings.integerBuilder("Blue").withMinimum(0).withMaximum(255).withValue(255));
+			Settings.integerBuilder("Blue").withMinimum(1).withMaximum(255).withValue(255));
 	private Setting<Integer> alpha = register(
-			Settings.integerBuilder("Alpha").withMinimum(0).withMaximum(255).withValue(125));
+			Settings.integerBuilder("Alpha").withMinimum(1).withMaximum(255).withValue(125));
 	private Setting<Integer> alpha2 = register(
-			Settings.integerBuilder("Bounding Box Alpha").withMinimum(0).withMaximum(255).withValue(255));
+			Settings.integerBuilder("Bounding Box Alpha").withMinimum(1).withMaximum(255).withValue(255));
 	private Setting<Float> width = register(
 			Settings.floatBuilder("Line Width").withMinimum(0f).withMaximum(7f).withValue(1.5f));
 	BlockPos render;
