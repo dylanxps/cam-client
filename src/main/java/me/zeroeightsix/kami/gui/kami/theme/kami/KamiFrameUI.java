@@ -17,6 +17,7 @@ import me.zeroeightsix.kami.gui.rgui.util.Docking;
 import me.zeroeightsix.kami.util.Bind;
 import me.zeroeightsix.kami.util.ColourHolder;
 import me.zeroeightsix.kami.util.Wrapper;
+import me.zeroeightsix.kami.module.modules.render.HUD;
 import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -36,6 +37,9 @@ public class KamiFrameUI<T extends Frame> extends AbstractComponentUI<Frame> {
     boolean centerX = false;
     boolean centerY = false;
     int xLineOffset = 0;
+    float red = 0;
+    float green = 0;
+    float blue = 0;
 
     private static final RootFontRenderer ff = new RootLargeFontRenderer();
 
@@ -43,17 +47,20 @@ public class KamiFrameUI<T extends Frame> extends AbstractComponentUI<Frame> {
     public void renderComponent(Frame component, FontRenderer fontRenderer) {
         if (component.getOpacity() == 0)
             return;
+        red = HUD.redF() / 255f;
+        green = HUD.greenF() / 255f;
+        blue = HUD.blueF() / 255f; 
         glDisable(GL_TEXTURE_2D);
-
-        glColor4f(1f,0f,0f,.50f);
+        
+        glColor4f(red,green,blue,.50f);
         RenderHelper.drawFilledRectangle(0,0,component.getWidth(),component.getHeight());
-        glColor3f(1f,1f,1f);
+        glColor3f(red,green,blue);
         glLineWidth(1.5f);
         RenderHelper.drawRectangle(0,0,component.getWidth(),component.getHeight());
 
         GL11.glColor3f(1,1,1);
         ff.drawString(component.getWidth() / 2 - ff.getStringWidth(component.getTitle()) / 2, 1, component.getTitle());
-
+        
         int top_y = 5;
         int bottom_y = component.getTheme().getFontRenderer().getFontHeight() - 9;
 
