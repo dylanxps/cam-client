@@ -1,6 +1,4 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
+
 
 package me.zeroeightsix.kami.module.modules.combat;
 
@@ -92,6 +90,9 @@ public class AutoFeetPlace extends Module
         this.firstRun = true;
         this.playerHotbarSlot = AutoFeetPlace.mc.player.inventory.currentItem;
         this.lastHotbarSlot = -1;
+        if (infoMessage.getValue() && mc.world != null) {
+            Command.sendChatMessage(" \u00A7eSurround \u00A7aON");
+        }
     }
     
     @Override
@@ -109,6 +110,9 @@ public class AutoFeetPlace extends Module
         this.playerHotbarSlot = -1;
         this.lastHotbarSlot = -1;
         this.missingObiDisable = false;
+        if (infoMessage.getValue() && mc.world != null) {
+            Command.sendChatMessage(" \u00A7eSurround \u00A7aOFF");
+        }
     }
     
     @Override
@@ -254,3 +258,4 @@ public class AutoFeetPlace extends Module
         }
     }
 }
+
