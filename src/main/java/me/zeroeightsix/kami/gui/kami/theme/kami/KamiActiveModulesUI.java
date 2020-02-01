@@ -1,16 +1,3 @@
-package me.zeroeightsix.kami.gui.kami.theme.kami;
-
-import me.zeroeightsix.kami.command.Command;
-import me.zeroeightsix.kami.gui.kami.component.ActiveModules;
-import me.zeroeightsix.kami.gui.rgui.component.AlignedComponent;
-import me.zeroeightsix.kami.gui.rgui.render.AbstractComponentUI;
-import me.zeroeightsix.kami.gui.rgui.render.font.FontRenderer;
-import me.zeroeightsix.kami.module.Module;
-import me.zeroeightsix.kami.module.ModuleManager;
-import me.zeroeightsix.kami.util.Wrapper;
-import me.zeroeightsix.kami.module.modules.render.HUD;
-import org.lwjgl.opengl.GL11;
-
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
@@ -38,6 +25,10 @@ public class KamiActiveModulesUI extends AbstractComponentUI<ActiveModules> {
 
         final int[] y = {2};
 
+        if (component.getParent().getY() < 26 && Wrapper.getPlayer().getActivePotionEffects().size()>0 && component.getParent().getOpacity() == 0)
+            y[0] = Math.max(component.getParent().getY(), 26 - component.getParent().getY());
+
+        final float[] hue = {(System.currentTimeMillis() % (360 * 32)) / (360f * 32)};
 
         boolean lAlign = component.getAlignment() == AlignedComponent.Alignment.LEFT;
         Function<Integer, Integer> xFunc;
@@ -55,13 +46,14 @@ public class KamiActiveModulesUI extends AbstractComponentUI<ActiveModules> {
         }
 
         mods.stream().forEach(module -> {
+            int rgb = Color.HSBtoRGB(hue[0], 1, 1);
             String s = module.getHudInfo();
             String text = module.getName() + (s==null?"" : " " + Command.SECTIONSIGN() + "7" + s);
             int textwidth = renderer.getStringWidth(text);
             int textheight = renderer.getFontHeight()+1;
-            int red = HUD.red()
-            int green = HUD.green();
-            int blue = HUD.blue();
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = rgb & 0xFF;
 
             renderer.drawStringWithShadow(xFunc.apply(textwidth), y[0], red,green,blue, text);
             hue[0] +=.02f;
