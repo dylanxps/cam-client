@@ -8,7 +8,6 @@ import me.zeroeightsix.kami.gui.UIRenderer;
 import me.zeroeightsix.kami.gui.kami.KamiGUI;
 import me.zeroeightsix.kami.gui.rgui.component.container.use.Frame;
 import me.zeroeightsix.kami.module.ModuleManager;
-import me.zeroeightsix.kami.module.modules.render.BossStack;
 import me.zeroeightsix.kami.util.KamiTessellator;
 import me.zeroeightsix.kami.util.Wrapper;
 import net.minecraft.client.Minecraft;
@@ -77,12 +76,7 @@ public class ForgeEventProcessor {
         ModuleManager.onWorldRender(event);
     }
 
-    @SubscribeEvent
-    public void onRenderPre(RenderGameOverlayEvent.Pre event) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.BOSSINFO && ModuleManager.isModuleEnabled("BossStack")) {
-            event.setCanceled(true);
-        }
-    }
+
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
@@ -98,8 +92,8 @@ public class ForgeEventProcessor {
             UIRenderer.renderAndUpdateFrames();
             GL11.glPopMatrix();
             KamiTessellator.releaseGL();
-        } else if (event.getType() == RenderGameOverlayEvent.ElementType.BOSSINFO && ModuleManager.isModuleEnabled("BossStack")) {
-            BossStack.render(event);
+        } {
+
         }
     }
 
