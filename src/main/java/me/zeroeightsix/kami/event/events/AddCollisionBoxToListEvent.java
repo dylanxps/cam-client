@@ -1,19 +1,20 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
 package me.zeroeightsix.kami.event.events;
 
-import me.zeroeightsix.kami.event.KamiEvent;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import java.util.List;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
+import me.zeroeightsix.kami.event.KamiEvent;
 
-import java.util.List;
-
-/**
- * Created by 086 on 11/12/2017.
- */
-public class AddCollisionBoxToListEvent extends KamiEvent {
+public class AddCollisionBoxToListEvent extends KamiEvent
+{
     private final Block block;
     private final IBlockState state;
     private final World world;
@@ -22,9 +23,8 @@ public class AddCollisionBoxToListEvent extends KamiEvent {
     private final List<AxisAlignedBB> collidingBoxes;
     private final Entity entity;
     private final boolean bool;
-
-    public AddCollisionBoxToListEvent(Block block, IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean bool) {
-        super();
+    
+    public AddCollisionBoxToListEvent(final Block block, final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, final Entity entityIn, final boolean bool) {
         this.block = block;
         this.state = state;
         this.world = worldIn;
@@ -34,36 +34,36 @@ public class AddCollisionBoxToListEvent extends KamiEvent {
         this.entity = entityIn;
         this.bool = bool;
     }
-
+    
     public Block getBlock() {
-        return block;
+        return this.block;
     }
-
+    
     public IBlockState getState() {
-        return state;
+        return this.state;
     }
-
+    
     public World getWorld() {
-        return world;
+        return this.world;
     }
-
+    
     public BlockPos getPos() {
-        return pos;
+        return this.pos;
     }
-
+    
     public AxisAlignedBB getEntityBox() {
-        return entityBox;
+        return this.entityBox;
     }
-
+    
     public List<AxisAlignedBB> getCollidingBoxes() {
-        return collidingBoxes;
+        return this.collidingBoxes;
     }
-
+    
     public Entity getEntity() {
-        return entity;
+        return this.entity;
     }
-
+    
     public boolean isBool() {
-        return bool;
+        return this.bool;
     }
 }

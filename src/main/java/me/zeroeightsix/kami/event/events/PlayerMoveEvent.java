@@ -1,52 +1,55 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
 package me.zeroeightsix.kami.event.events;
 
-import me.zeroeightsix.kami.event.KamiEvent;
 import net.minecraft.entity.MoverType;
+import me.zeroeightsix.kami.event.KamiEvent;
 
-/**
- * @author 086
- */
-public class PlayerMoveEvent extends KamiEvent {
-
+public class PlayerMoveEvent extends KamiEvent
+{
     private MoverType type;
-    private double x, y, z;
-
-    public PlayerMoveEvent(MoverType type, double x, double y, double z) {
+    private double x;
+    private double y;
+    private double z;
+    
+    public PlayerMoveEvent(final MoverType type, final double x, final double y, final double z) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.z = z;
     }
-
+    
     public MoverType getType() {
-        return type;
+        return this.type;
     }
-
-    public void setType(MoverType type) {
+    
+    public void setType(final MoverType type) {
         this.type = type;
     }
-
+    
     public double getX() {
-        return x;
+        return this.x;
     }
-
+    
     public double getY() {
-        return y;
+        return this.y;
     }
-
+    
     public double getZ() {
-        return z;
+        return this.z;
     }
-
-    public void setX(double x) {
+    
+    public void setX(final double x) {
         this.x = x;
     }
-
-    public void setY(double y) {
+    
+    public void setY(final double y) {
         this.y = y;
     }
-
-    public void setZ(double z) {
+    
+    public void setZ(final double z) {
         this.z = z;
     }
 }
