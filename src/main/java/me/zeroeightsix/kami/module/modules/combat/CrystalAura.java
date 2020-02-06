@@ -3,6 +3,7 @@ package me.zeroeightsix.kami.module.modules.combat;
 import me.zero.alpine.listener.EventHandler;
 import me.zero.alpine.listener.Listener;
 import me.zeroeightsix.kami.command.Command;
+import me.zeroeightsix.kami.module.modules.render.HUD;
 import me.zeroeightsix.kami.event.events.PacketEvent;
 import me.zeroeightsix.kami.event.events.RenderEvent;
 import me.zeroeightsix.kami.module.Module;
@@ -55,12 +56,6 @@ public class CrystalAura extends Module {
 	private Setting<Boolean> alert = register(Settings.b("Chat Alerts", true));
 	private Setting<Integer> MinDmg = register(
 			Settings.integerBuilder("Min Dmg").withMinimum(0).withMaximum(16).withValue(2));
-	private Setting<Integer> Red = register(
-			Settings.integerBuilder("Red").withMinimum(0).withMaximum(255).withValue(255));
-	private Setting<Integer> Green = register(
-			Settings.integerBuilder("Green").withMinimum(0).withMaximum(255).withValue(0));
-	private Setting<Integer> Blue = register(
-			Settings.integerBuilder("Blue").withMinimum(0).withMaximum(255).withValue(255));
 	private Setting<Integer> Alpha = register(
 			Settings.integerBuilder("Alpha").withMinimum(0).withMaximum(70).withValue(45));
 	private BlockPos render;
@@ -262,8 +257,7 @@ public class CrystalAura extends Module {
 	public void onWorldRender(RenderEvent event) {
 		if (render != null) {
 			KamiTessellator.prepare(GL11.GL_QUADS);
-			KamiTessellator.drawBox(render, Red.getValue().intValue(), Green.getValue().intValue(),
-					Blue.getValue().intValue(), Alpha.getValue().intValue(), GeometryMasks.Quad.ALL);
+			KamiTessellator.drawBox(render, HUD.red(), HUD.green(), HUD.blue(), Alpha.getValue.intValue(), GeometryMasks.Quad.ALL);
 			KamiTessellator.release();
 		}
 	}
