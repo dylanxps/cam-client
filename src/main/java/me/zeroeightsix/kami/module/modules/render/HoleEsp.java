@@ -6,6 +6,7 @@ import me.zeroeightsix.kami.event.events.RenderEvent;
 import me.zeroeightsix.kami.module.Module;
 import me.zeroeightsix.kami.setting.Setting;
 import me.zeroeightsix.kami.setting.Settings;
+import me.zeroeightsix.kami.module.modules.render.HUD;
 import me.zeroeightsix.kami.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -68,26 +69,24 @@ public class HoleEsp extends Module {
 			for (BlockPos hole : blocks) {
 				if (highlight.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBox(hole, Red.getValue(), Green.getValue(), Blue.getValue(), alpha.getValue(),
+					KamiTessellator.drawBox(hole, HUD.red(), HUD.green(), HUD.blue(), alpha.getValue(),
 							GeometryMasks.Quad.ALL);
 					KamiTessellator.release();
 				}
 				if (box.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBoundingBoxBlockPos(hole, width.getValue(), Red.getValue(), Green.getValue(),
-							Blue.getValue(), alpha2.getValue());
+					KamiTessellator.drawBoundingBoxBlockPos(hole, width.getValue(), HUD.red(), HUD.green(), HUD.blue(), alpha2.getValue());
 					KamiTessellator.release();
 				}
 				if (bottom.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBoxBottom(hole, Red.getValue(), Green.getValue(), Blue.getValue(),
+					KamiTessellator.drawBoxBottom(hole, HUD.red(), HUD.green(), HUD.blue(),
 							alpha.getValue());
 					KamiTessellator.release();
 				}
 				if (bottomBox.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBoundingBoxBottomBlockPos(hole, width.getValue(), Red.getValue(),
-							Green.getValue(), Blue.getValue(), alpha2.getValue());
+					KamiTessellator.drawBoundingBoxBottomBlockPos(hole, width.getValue(), HUD.red(), HUD.green(), HUD.blue(), alpha2.getValue());
 					KamiTessellator.release();
 				}
 			}
