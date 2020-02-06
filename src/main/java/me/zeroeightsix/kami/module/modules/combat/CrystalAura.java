@@ -257,7 +257,7 @@ public class CrystalAura extends Module {
 	public void onWorldRender(RenderEvent event) {
 		if (render != null) {
 			KamiTessellator.prepare(GL11.GL_QUADS);
-			KamiTessellator.drawBox(render, HUD.red(), HUD.green(), HUD.blue(), Alpha.getValue.intValue(), GeometryMasks.Quad.ALL);
+			KamiTessellator.drawBox(render, HUD.red(), HUD.green(), HUD.blue(), Alpha.getValue().intValue(), GeometryMasks.Quad.ALL);
 			KamiTessellator.release();
 		}
 	}
