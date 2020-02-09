@@ -2,11 +2,15 @@
 // Decompiled by Procyon v0.5.36
 // 
 
-package me.zeroeightsix.kami.module.modules.dev;
+package me.zeroeightsix.kami.module.modules.combat;
 
 import java.util.function.ToIntFunction;
 
 import me.zeroeightsix.kami.module.modules.combat.AutoTotemDev;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +28,7 @@ public class OffhandGap extends Module
     private int gapples;
     private boolean moving;
     private boolean returnI;
+    private Setting<Boolean> life;
     private Setting<Boolean> soft;
     private Setting<Boolean> totemOnDisable;
     private Setting<TotemMode> totemMode;
@@ -31,6 +36,7 @@ public class OffhandGap extends Module
     public OffhandGap() {
         this.moving = false;
         this.returnI = false;
+        this.life = this.register(Settings.b("life", false));
         this.soft = this.register(Settings.b("Soft", false));
         this.totemOnDisable = this.register(Settings.b("TotemOnDisable", true));
         this.totemMode = this.register((Setting<TotemMode>)Settings.enumBuilder(TotemMode.class).withName("TotemMode").withValue(TotemMode.KAMI).withVisibility(v -> this.totemOnDisable.getValue()).build());
@@ -56,13 +62,7 @@ public class OffhandGap extends Module
                 autoTotem.enable();
             }
         }
-        if (this.totemMode.getValue().equals(TotemMode.ASIMOV)) {
-            final AutoTotemDev autoTotemDev = (AutoTotemDev)ModuleManager.getModuleByName("AutoTotemDev");
-            autoTotemDev.disableSoft();
-            if (autoTotemDev.isDisabled()) {
-                autoTotemDev.enable();
-            }
-        }
+
     }
     
     @Override
@@ -131,7 +131,12 @@ public class OffhandGap extends Module
                 OffhandGap.mc.playerController.windowClick(0, (t < 9) ? (t + 36) : t, 0, ClickType.PICKUP, (EntityPlayer)OffhandGap.mc.player);
             }
         }
+
+
+
+
     }
+
     
     @Override
     public String getHudInfo() {
@@ -141,6 +146,5 @@ public class OffhandGap extends Module
     private enum TotemMode
     {
         KAMI, 
-        ASIMOV;
     }
 }

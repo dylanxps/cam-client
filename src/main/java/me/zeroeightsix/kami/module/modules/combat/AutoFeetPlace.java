@@ -1,15 +1,16 @@
-
+// 
+// Decompiled by Procyon v0.5.36
+// 
 
 package me.zeroeightsix.kami.module.modules.combat;
 
+import me.zeroeightsix.kami.util.BlockInteractionHelper;
 import net.minecraft.block.BlockObsidian;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import java.util.Iterator;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3i;
-import me.zeroeightsix.kami.util.BlockInteractionHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -258,4 +259,3 @@ public class AutoFeetPlace extends Module
         }
     }
 }
-

@@ -2,6 +2,7 @@ package me.zeroeightsix.kami.gui.kami;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.zeroeightsix.kami.KamiMod;
+import me.zeroeightsix.kami.util.GuiManager;
 import me.zeroeightsix.kami.command.Command;
 import me.zeroeightsix.kami.gui.kami.component.ActiveModules;
 import me.zeroeightsix.kami.gui.kami.component.SettingsPanel;
@@ -18,10 +19,7 @@ import me.zeroeightsix.kami.gui.rgui.util.ContainerHelper;
 import me.zeroeightsix.kami.gui.rgui.util.Docking;
 import me.zeroeightsix.kami.module.Module;
 import me.zeroeightsix.kami.module.ModuleManager;
-import me.zeroeightsix.kami.util.ColourHolder;
-import me.zeroeightsix.kami.util.LagCompensator;
-import me.zeroeightsix.kami.util.Pair;
-import me.zeroeightsix.kami.util.Wrapper;
+import me.zeroeightsix.kami.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +28,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.entity.projectile.EntityWitherSkull;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
@@ -209,7 +210,9 @@ public class KamiGUI extends GUI {
             information.addLine("\u00A7b" + Wrapper.getMinecraft().debugFPS + Command.SECTIONSIGN() + "3 fps");
 
 //            information.addLine("[&3" + Sprint.getSpeed() + "km/h&r]");
+
         });
+
         frame = new Frame(getTheme(), new Stretcherlayout(1), "welcome");
         frame.setCloseable(false);
         frame.setPinneable(true);
@@ -223,67 +226,23 @@ public class KamiGUI extends GUI {
 
         });
 
-
+//black
 
 
 
         frame.addChild(information);
         information.setFontRenderer(fontRenderer);
         frames.add(frame);
-
-        frame = new Frame(getTheme(), new Stretcherlayout(1), "Text Radar");
-        Label list = new Label("");
-        DecimalFormat dfHealth = new DecimalFormat("#.#");
-        dfHealth.setRoundingMode(RoundingMode.HALF_UP);
-        StringBuilder healthSB = new StringBuilder();
-        list.addTickListener(() -> {
-            if (!list.isVisible()) return;
-            list.setText("");
-
-            Minecraft mc = Wrapper.getMinecraft();
-
-            if (mc.player == null) return;
-            List<EntityPlayer> entityList = mc.world.playerEntities;
-
-            Map<String, Integer> players = new HashMap<>();
-            for (Entity e : entityList) {
-                if (e.getName().equals(mc.player.getName())) continue;
-                String posString = (e.posY > mc.player.posY ? ChatFormatting.DARK_GREEN + "+" : (e.posY == mc.player.posY ? " " : ChatFormatting.DARK_RED + "-"));
-                float hpRaw = ((EntityLivingBase) e).getHealth() + ((EntityLivingBase) e).getAbsorptionAmount();
-                String hp = dfHealth.format(hpRaw);
-                healthSB.append(Command.SECTIONSIGN());
-                if (hpRaw >= 20) {
-                    healthSB.append("a");
-                } else if (hpRaw >= 10) {
-                    healthSB.append("e");
-                } else if (hpRaw >= 5) {
-                    healthSB.append("6");
-                } else {
-                    healthSB.append("c");
-                }
-                healthSB.append(hp);
-                players.put(ChatFormatting.GRAY + posString + " " + healthSB.toString() + " " + ChatFormatting.GRAY + e.getName(), (int) mc.player.getDistance(e));
-                healthSB.setLength(0);
-            }
-
-            if (players.isEmpty()) {
-                list.setText("");
-                return;
-            }
-
-            players = sortByValue(players);
-
-            for (Map.Entry<String, Integer> player : players.entrySet()) {
-                list.addLine(Command.SECTIONSIGN() + "7" + player.getKey() + " " + Command.SECTIONSIGN() + "8" + player.getValue());
-            }
-        });
-        frame.setCloseable(false);
-        frame.setPinneable(true);
-        frame.setMinimumWidth(75);
-        list.setShadow(true);
-        frame.addChild(list);
-        list.setFontRenderer(fontRenderer);
         frames.add(frame);
+        frame = new Frame(this.getTheme(), new Stretcherlayout(1), "Inventory Viewer");
+        frame.setCloseable(false);
+        frame.setMinimizeable(false);
+        frame.setPinneable(true);
+        final Label inventory = new Label("");
+        inventory.setShadow(true);
+        inventory.addTickListener(() -> inventory.setText("      "));
+        frame.addChild(inventory);
+        inventory.setFontRenderer(KamiGUI.fontRenderer);
 
         frame = new Frame(getTheme(), new Stretcherlayout(1), "Entities");
         Label entityLabel = new Label("");

@@ -1,3 +1,4 @@
+
 package me.zeroeightsix.kami.gui.kami.theme.kami;
 
 import me.zeroeightsix.kami.command.Command;

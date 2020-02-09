@@ -43,8 +43,8 @@ public class HighLight extends Module {
 				}
 				if (box.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBoundingBoxBlockPos(blockpos, width.getValue().floatValue(), HUD.red(),HUD.green(), HUD.blue(), alpha.getValue());
-
+					KamiTessellator.drawBoundingBoxBlockPos(blockpos, width.getValue().floatValue(), HUD.red(),
+							HUD.green(), HUD.blue(), alpha.getValue());
 					KamiTessellator.release();
 				}
 			}

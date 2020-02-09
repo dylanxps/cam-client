@@ -1,59 +1,57 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 package me.zeroeightsix.kami.event.events;
 
-import net.minecraft.entity.Entity;
 import me.zeroeightsix.kami.event.KamiEvent;
+import net.minecraft.entity.Entity;
 
-public class EntityEvent extends KamiEvent
-{
+/**
+ * Created by 086 on 16/11/2017.
+ */
+public class EntityEvent extends KamiEvent {
+
     private Entity entity;
-    
-    public EntityEvent(final Entity entity) {
+
+    public EntityEvent(Entity entity) {
+        super();
         this.entity = entity;
     }
-    
+
     public Entity getEntity() {
-        return this.entity;
+        return entity;
     }
-    
-    public static class EntityCollision extends EntityEvent
-    {
-        double x;
-        double y;
-        double z;
-        
-        public EntityCollision(final Entity entity, final double x, final double y, final double z) {
+
+    public static class EntityCollision extends EntityEvent {
+        double x,y,z;
+
+        public EntityCollision(Entity entity, double x, double y, double z) {
             super(entity);
             this.x = x;
             this.y = y;
             this.z = z;
         }
-        
+
         public double getX() {
-            return this.x;
+            return x;
         }
-        
+
         public double getY() {
-            return this.y;
+            return y;
         }
-        
+
         public double getZ() {
-            return this.z;
+            return z;
         }
-        
-        public void setX(final double x) {
+
+        public void setX(double x) {
             this.x = x;
         }
-        
-        public void setY(final double y) {
+
+        public void setY(double y) {
             this.y = y;
         }
-        
-        public void setZ(final double z) {
+
+        public void setZ(double z) {
             this.z = z;
         }
     }
+
 }

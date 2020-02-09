@@ -22,7 +22,9 @@ public class Timer extends Module {
     @Override
     public void onDisable() {
         mc.timer.tickLength = 50;
-        
+        if (infoMessage.getValue() && mc.world != null) {
+            Command.sendChatMessage(" \u00A7eTimer \u00A7aOFF");
+        }
     }
 
     @Override

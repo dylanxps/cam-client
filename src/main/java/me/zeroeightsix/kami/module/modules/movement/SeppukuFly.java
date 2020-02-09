@@ -4,12 +4,13 @@
 
 package me.zeroeightsix.kami.module.modules.movement;
 
+import me.zeroeightsix.kami.util.BlockInteractionHelper;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import java.util.function.Predicate;
-import me.zeroeightsix.kami.util.BlockInteractionHelper;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.client.Minecraft;

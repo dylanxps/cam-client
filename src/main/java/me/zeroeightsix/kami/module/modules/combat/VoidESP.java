@@ -1,4 +1,4 @@
-package me.zeroeightsix.kami.module.modules.render;
+package me.zeroeightsix.kami.module.modules.combat;
 
 import io.netty.util.internal.ConcurrentSet;
 import me.zeroeightsix.kami.event.events.RenderEvent;
@@ -20,7 +20,7 @@ import static me.zeroeightsix.kami.module.modules.combat.CrystalAura.getPlayerPo
 /**
  * Created 28 November 2019 by hub
  */
-@Module.Info(name = "VoidESP", category = Module.Category.RENDER, description = "Show void holes")
+@Module.Info(name = "VoidESP", category = Module.Category.COMBAT, description = "Show void holes")
 public class VoidESP extends Module {
 
     private Setting<Integer> range = register(Settings.integerBuilder("Range").withMinimum(1).withValue(8).withMaximum(32).build());

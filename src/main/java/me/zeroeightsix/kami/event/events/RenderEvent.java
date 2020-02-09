@@ -1,41 +1,43 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 package me.zeroeightsix.kami.event.events;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.client.renderer.Tessellator;
 import me.zeroeightsix.kami.event.KamiEvent;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.math.Vec3d;
 
-public class RenderEvent extends KamiEvent
-{
+/**
+ * Created by 086 on 10/12/2017.
+ * https://github.com/fr1kin/ForgeHax/blob/4697e629f7fa4f85faa66f9ac080573407a6d078/src/main/java/com/matt/forgehax/events/RenderEvent.java
+ */
+public class RenderEvent extends KamiEvent {
+
     private final Tessellator tessellator;
     private final Vec3d renderPos;
-    
-    public RenderEvent(final Tessellator tessellator, final Vec3d renderPos) {
+
+    public RenderEvent(Tessellator tessellator, Vec3d renderPos) {
+        super();
         this.tessellator = tessellator;
         this.renderPos = renderPos;
     }
-    
+
     public Tessellator getTessellator() {
-        return this.tessellator;
+        return tessellator;
     }
-    
+
     public BufferBuilder getBuffer() {
-        return this.tessellator.getBuffer();
+        return tessellator.getBuffer();
     }
-    
+
     public Vec3d getRenderPos() {
-        return this.renderPos;
+        return renderPos;
     }
-    
-    public void setTranslation(final Vec3d translation) {
-        this.getBuffer().setTranslation(-translation.x, -translation.y, -translation.z);
+
+    public void setTranslation(Vec3d translation) {
+        getBuffer().setTranslation(-translation.x, -translation.y, -translation.z);
     }
-    
+
     public void resetTranslation() {
-        this.setTranslation(this.renderPos);
+        setTranslation(renderPos);
     }
+
 }

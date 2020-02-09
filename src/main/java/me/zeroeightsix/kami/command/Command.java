@@ -27,9 +27,10 @@ public abstract class Command {
 		this.description = "Descriptionless";
 	}
 
-	public static void sendChatMessage(String message){
-		sendRawChatMessage("&7[&a" + KamiMod.KAMI_KANJI + "&7] &r" + message);
+	public static void sendChatMessage(final String message) {
+		sendRawChatMessage("\u00A77[\u00A7aCami\u00A77]  \u00A7d" + message);
 	}
+
 
 	public static void sendStringChatMessage(String[] messages) {
 		sendChatMessage("");

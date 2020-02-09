@@ -1,6 +1,6 @@
-//
+// 
 // Decompiled by Procyon v0.5.36
-//
+// 
 
 package me.zeroeightsix.kami.util;
 
@@ -26,7 +26,7 @@ public class BlockInteractionHelper
     public static final List<Block> blackList;
     public static final List<Block> shulkerList;
     private static final Minecraft mc;
-
+    
     public static void placeBlockScaffold(final BlockPos pos) {
         final Vec3d eyesPos = new Vec3d(Wrapper.getPlayer().posX, Wrapper.getPlayer().posY + Wrapper.getPlayer().getEyeHeight(), Wrapper.getPlayer().posZ);
         for (final EnumFacing side : EnumFacing.values()) {
@@ -44,7 +44,7 @@ public class BlockInteractionHelper
             }
         }
     }
-
+    
     private static float[] getLegitRotations(final Vec3d vec) {
         final Vec3d eyesPos = getEyesPos();
         final double diffX = vec.x - eyesPos.x;
@@ -55,36 +55,36 @@ public class BlockInteractionHelper
         final float pitch = (float)(-Math.toDegrees(Math.atan2(diffY, diffXZ)));
         return new float[] { Wrapper.getPlayer().rotationYaw + MathHelper.wrapDegrees(yaw - Wrapper.getPlayer().rotationYaw), Wrapper.getPlayer().rotationPitch + MathHelper.wrapDegrees(pitch - Wrapper.getPlayer().rotationPitch) };
     }
-
+    
     private static Vec3d getEyesPos() {
         return new Vec3d(Wrapper.getPlayer().posX, Wrapper.getPlayer().posY + Wrapper.getPlayer().getEyeHeight(), Wrapper.getPlayer().posZ);
     }
-
+    
     public static void faceVectorPacketInstant(final Vec3d vec) {
         final float[] rotations = getLegitRotations(vec);
         Wrapper.getPlayer().connection.sendPacket((Packet)new CPacketPlayer.Rotation(rotations[0], rotations[1], Wrapper.getPlayer().onGround));
     }
-
+    
     private static void processRightClickBlock(final BlockPos pos, final EnumFacing side, final Vec3d hitVec) {
         getPlayerController().processRightClickBlock(Wrapper.getPlayer(), BlockInteractionHelper.mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
     }
-
+    
     public static boolean canBeClicked(final BlockPos pos) {
         return getBlock(pos).canCollideCheck(getState(pos), false);
     }
-
+    
     private static Block getBlock(final BlockPos pos) {
         return getState(pos).getBlock();
     }
-
+    
     private static PlayerControllerMP getPlayerController() {
         return Minecraft.getMinecraft().playerController;
     }
-
+    
     private static IBlockState getState(final BlockPos pos) {
         return Wrapper.getWorld().getBlockState(pos);
     }
-
+    
     public static boolean checkForNeighbours(final BlockPos blockPos) {
         if (!hasNeighbour(blockPos)) {
             for (final EnumFacing side : EnumFacing.values()) {
@@ -97,7 +97,7 @@ public class BlockInteractionHelper
         }
         return true;
     }
-
+    
     public static boolean hasNeighbour(final BlockPos blockPos) {
         for (final EnumFacing side : EnumFacing.values()) {
             final BlockPos neighbour = blockPos.offset(side);
@@ -107,7 +107,7 @@ public class BlockInteractionHelper
         }
         return false;
     }
-
+    
     public static float[] calcAngle(final Vec3d from, final Vec3d to) {
         final double difX = to.x - from.x;
         final double difY = (to.y - from.y) * -1.0;
@@ -115,7 +115,7 @@ public class BlockInteractionHelper
         final double dist = MathHelper.sqrt(difX * difX + difZ * difZ);
         return new float[] { (float)MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difZ, difX)) - 90.0), (float)MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difY, dist))) };
     }
-
+    
     public static List<BlockPos> getSphere(final BlockPos loc, final float r, final int h, final boolean hollow, final boolean sphere, final int plus_y) {
         final List<BlockPos> circleblocks = new ArrayList<BlockPos>();
         final int cx = loc.getX();
@@ -134,7 +134,7 @@ public class BlockInteractionHelper
         }
         return circleblocks;
     }
-
+    
     public static List<BlockPos> getCircle(final BlockPos loc, final int y, final float r, final boolean hollow) {
         final List<BlockPos> circleblocks = new ArrayList<BlockPos>();
         final int cx = loc.getX();
@@ -150,7 +150,7 @@ public class BlockInteractionHelper
         }
         return circleblocks;
     }
-
+    
     public static EnumFacing getPlaceableSide(final BlockPos pos) {
         for (final EnumFacing side : EnumFacing.values()) {
             final BlockPos neighbour = pos.offset(side);
@@ -163,7 +163,7 @@ public class BlockInteractionHelper
         }
         return null;
     }
-
+    
     public static double[] directionSpeed(final double speed) {
         final Minecraft mc = Minecraft.getMinecraft();
         float forward = mc.player.movementInput.moveForward;
@@ -190,7 +190,7 @@ public class BlockInteractionHelper
         final double posZ = forward * speed * sin - side * speed * cos;
         return new double[] { posX, posZ };
     }
-
+    
     static {
         blackList = Arrays.asList(Blocks.ENDER_CHEST, (Block)Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, (Block)Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER, Blocks.TRAPDOOR);
         shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
