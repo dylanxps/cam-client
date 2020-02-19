@@ -20,6 +20,8 @@ import me.zeroeightsix.kami.util.Wrapper;
 import me.zeroeightsix.kami.module.modules.render.HUD;
 import org.lwjgl.opengl.GL11;
 
+import static me.zeroeightsix.kami.module.modules.render.HUD.Oblue;
+import static me.zeroeightsix.kami.module.modules.render.HUD.Ogreen;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -52,11 +54,12 @@ public class KamiFrameUI<T extends Frame> extends AbstractComponentUI<Frame> {
         blue = HUD.blueF() / 255f; 
         glDisable(GL_TEXTURE_2D);
         
-        glColor4f(red,green,blue,.50f);
+        glColor4f(red,green,blue,.6f);
         RenderHelper.drawFilledRectangle(0,0,component.getWidth(),component.getHeight());
-        glColor3f(red,green,blue);
+        glColor3f(HUD.Ored() / 255f ,HUD.Ogreen() / 255f,HUD.Oblue() / 255f);
         glLineWidth(1.5f);
         RenderHelper.drawRectangle(0,0,component.getWidth(),component.getHeight());
+        RenderHelper.drawRectangle(0,0,component.getWidth(),ff.getFontHeight() + 2);
 
         GL11.glColor3f(1,1,1);
         ff.drawString(component.getWidth() / 2 - ff.getStringWidth(component.getTitle()) / 2, 1, component.getTitle());

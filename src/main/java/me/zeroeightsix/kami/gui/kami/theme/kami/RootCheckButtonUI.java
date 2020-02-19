@@ -36,7 +36,7 @@ public class RootCheckButtonUI<T extends CheckButton> extends AbstractComponentU
         }
 
         String text = component.getName();
-        int c = component.isPressed() ? 0xaaaaaa : component.isToggled() ? 0xff3333 : 0xdddddd;
+        int c = component.isPressed() ? 0xaaaaaa : component.isToggled() ? 0xff00ff : 0xdddddd;
         if (component.isHovered())
             c = (c & 0x7f7f7f) << 1;
 
@@ -49,7 +49,7 @@ public class RootCheckButtonUI<T extends CheckButton> extends AbstractComponentU
 
     @Override
     public void handleAddComponent(CheckButton component, Container container) {
-        component.setWidth(KamiGUI.fontRenderer.getStringWidth(component.getName()) + 28);
-        component.setHeight(KamiGUI.fontRenderer.getFontHeight()+2);
+        component.setWidth(KamiGUI.fontRenderer.getStringWidth("TotemPopCounter") + 3);
+        component.setHeight(KamiGUI.fontRenderer.getFontHeight() + 2);
     }
 }
