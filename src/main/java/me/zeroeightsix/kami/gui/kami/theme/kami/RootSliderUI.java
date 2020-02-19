@@ -29,13 +29,13 @@ public class RootSliderUI extends AbstractComponentUI<Slider> {
             glVertex2d(0,height/downscale);
             glVertex2d(w,height/downscale);
         }
-        glColor3f(0.33f,0.33f,0.33f);
+        glColor3f(1f,0f,1f);
         {
             glVertex2d(w,height/downscale);
             glVertex2d(component.getWidth(),height/downscale);
         }
         glEnd();
-        glColor3f(1,0.33f,0.33f);
+        glColor3f(1,1f,1f);
         RenderHelper.drawCircle((int)w,height/downscale,2f);
 
         String s = value + "";

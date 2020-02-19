@@ -14,14 +14,12 @@ import me.zeroeightsix.kami.gui.rgui.render.AbstractComponentUI;
 import me.zeroeightsix.kami.gui.rgui.render.font.FontRenderer;
 import me.zeroeightsix.kami.gui.rgui.util.ContainerHelper;
 import me.zeroeightsix.kami.gui.rgui.util.Docking;
+import me.zeroeightsix.kami.module.modules.render.HUD;
 import me.zeroeightsix.kami.util.Bind;
 import me.zeroeightsix.kami.util.ColourHolder;
 import me.zeroeightsix.kami.util.Wrapper;
-import me.zeroeightsix.kami.module.modules.render.HUD;
 import org.lwjgl.opengl.GL11;
 
-import static me.zeroeightsix.kami.module.modules.render.HUD.Oblue;
-import static me.zeroeightsix.kami.module.modules.render.HUD.Ogreen;
 import static org.lwjgl.opengl.GL11.*;
 
 /**

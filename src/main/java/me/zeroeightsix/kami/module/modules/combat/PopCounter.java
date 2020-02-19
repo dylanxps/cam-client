@@ -4,20 +4,18 @@
 
 package me.zeroeightsix.kami.module.modules.combat;
 
-import java.util.Iterator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.Entity;
+import me.zero.alpine.listener.EventHandler;
+import me.zero.alpine.listener.Listener;
 import me.zeroeightsix.kami.KamiMod;
-import net.minecraft.world.World;
-import net.minecraft.network.play.server.SPacketEntityStatus;
-import java.util.function.Predicate;
 import me.zeroeightsix.kami.command.Command;
 import me.zeroeightsix.kami.event.events.PacketEvent;
-import me.zero.alpine.listener.EventHandler;
 import me.zeroeightsix.kami.event.events.TotemPopEvent;
-import me.zero.alpine.listener.Listener;
-import java.util.HashMap;
 import me.zeroeightsix.kami.module.Module;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.SPacketEntityStatus;
+
+import java.util.HashMap;
 
 @Module.Info(name = "TotemPopCounter", description = "Counts the times your enemy pops", category = Module.Category.COMBAT)
 public class PopCounter extends Module
@@ -46,8 +44,7 @@ public class PopCounter extends Module
                 this.popList.put(event.getEntity().getName(), newPopCounter[0]);
                 Command.sendChatMessage("\u00A79" + event.getEntity().getName() + " popped " + newPopCounter[0] + " totems!");
             }
-            return;
-        }, (Predicate<TotemPopEvent>[])new Predicate[0]);
+        });
         final SPacketEntityStatus[] packet = new SPacketEntityStatus[1];
         final Entity[] entity = new Entity[1];
         this.totemPopListener = new Listener<PacketEvent.Receive>(event -> {
@@ -55,12 +52,12 @@ public class PopCounter extends Module
                 if (event.getPacket() instanceof SPacketEntityStatus) {
                     packet[0] = (SPacketEntityStatus)event.getPacket();
                     if (packet[0].getOpCode() == 35) {
-                        entity[0] = packet[0].getEntity((World)PopCounter.mc.world);
+                        entity[0] = packet[0].getEntity(PopCounter.mc.world);
                         KamiMod.EVENT_BUS.post(new TotemPopEvent(entity[0]));
                     }
                 }
             }
-        }, (Predicate<PacketEvent.Receive>[])new Predicate[0]);
+        });
     }
 
     @Override
