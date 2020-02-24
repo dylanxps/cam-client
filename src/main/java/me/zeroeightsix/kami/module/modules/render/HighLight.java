@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.*;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.common.eventhandler.*;
 import org.lwjgl.opengl.GL11;
+
 import java.awt.Color;
 
 @Module.Info(name = "BlockHighlight", description = "Happy Halloween <3", category = Module.Category.RENDER)
@@ -25,8 +26,14 @@ public class HighLight extends Module {
 			Settings.integerBuilder("Alpha").withMinimum(1).withMaximum(255).withValue(255));
 	private Setting<Integer> alpha2 = register(
 			Settings.integerBuilder("Bounding Box Alpha").withMinimum(1).withMaximum(255).withValue(20));
+	private Setting<Boolean> rainbow = register(Settings.b("Rainbow", false));
 
 	public void onWorldRender(RenderEvent event) {
+		final float[] hue = {(System.currentTimeMillis() % (360 * 32)) / (360f * 32)};
+		int rgb = Color.HSBtoRGB(hue[0], 1, 1);
+		int r = (rgb >> 16) & 0xFF;
+		int g = (rgb >> 8) & 0xFF;
+		int b = rgb & 0xFF;
 		final Minecraft mc = Minecraft.getMinecraft();
 		final RayTraceResult ray = mc.objectMouseOver;
 		if (ray.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -35,16 +42,22 @@ public class HighLight extends Module {
 			final IBlockState iblockstate = mc.world.getBlockState(blockpos);
 
 			if (iblockstate.getMaterial() != Material.AIR && mc.world.getWorldBorder().contains(blockpos)) {
-				if (boundingbox.getValue()) {
-					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBox(blockpos, HUD.red(), HUD.green(), HUD.blue(), alpha2.getValue(),
-							GeometryMasks.Quad.ALL);
-					KamiTessellator.release();
-				}
 				if (box.getValue()) {
 					KamiTessellator.prepare(GL11.GL_QUADS);
-					KamiTessellator.drawBoundingBoxBlockPos(blockpos, width.getValue().floatValue(), HUD.red(),
-							HUD.green(), HUD.blue(), alpha.getValue());
+					if (rainbow.getValue()) {
+						KamiTessellator.drawBox(blockpos, r, g, b, alpha.getValue(), GeometryMasks.Quad.ALL);
+					} else {
+						KamiTessellator.drawBox(blockpos, HUD.red(), HUD.green(), HUD.blue(), alpha.getValue(), GeometryMasks.Quad.ALL);
+					}
+					KamiTessellator.release();
+				}
+				if (boundingbox.getValue()) {
+					KamiTessellator.prepare(GL11.GL_QUADS);
+					if (rainbow.getValue()) {
+						KamiTessellator.drawBoundingBoxBlockPos(blockpos, width.getValue().floatValue(), r, g, b, alpha2.getValue());
+					} else {
+						KamiTessellator.drawBoundingBoxBlockPos(blockpos, width.getValue().floatValue(), HUD.red(), HUD.green(), HUD.blue(), alpha2.getValue());
+					}
 					KamiTessellator.release();
 				}
 			}
